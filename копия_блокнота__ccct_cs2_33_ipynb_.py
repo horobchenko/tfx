@@ -21,45 +21,11 @@ Original file is located at
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""# Simple TFX Pipeline Tutorial using Penguin dataset
+"""# 
 
 ***A Short tutorial to run a simple TFX pipeline.***
 
 Note: We recommend running this tutorial in a Colab notebook, with no setup required!  Just click "Run in Google Colab".
-
-<div class="buttons-wrapper">
-  <a class="md-button" target="_blank" href=
-     "https://www.tensorflow.org/tfx/tutorials/tfx/penguin_simple">
-    <div class="buttons-content">
-      <img src="https://www.tensorflow.org/images/tf_logo_32px.png">
-      View on TensorFlow.org
-    </div>
-  </a>
-  <a class="md-button" target="_blank" href=
-     "https://colab.research.google.com/github/tensorflow/tfx/blob/master/docs/tutorials/tfx/penguin_simple.ipynb">
-    <div class="buttons-content">
-      <img src=
-	   "https://www.tensorflow.org/images/colab_logo_32px.png">
-      Run in Google Colab
-    </div>
-  </a>
-  <a class="md-button" target="_blank" href=
-     "https://github.com/tensorflow/tfx/tree/master/docs/tutorials/tfx/penguin_simple.ipynb">
-    <div class="buttons-content">
-      <img width="32px" src=
-	   "https://www.tensorflow.org/images/GitHub-Mark-32px.png">
-      View source on GitHub
-    </div>
-  </a>
-  <a class="md-button" href=
-     "https://storage.googleapis.com/tensorflow_docs/tfx/docs/tutorials/tfx/penguin_simple.ipynb">
-    <div class="buttons-content">
-      <img src=
-	   "https://www.tensorflow.org/images/download_logo_32px.png">
-      Download notebook
-    </div>
-  </a>
-</div>
 
 In this notebook-based tutorial, we will create and run a TFX pipeline
 for a simple classification model.
@@ -130,27 +96,13 @@ SERVING_MODEL_DIR = os.path.join('serving_model', PIPELINE_NAME)
 
 from absl import logging
 logging.set_verbosity(logging.INFO)  # Set default logging level.
-
-"""### Prepare example data
-We will download the example dataset for use in our TFX pipeline. The dataset we
-are using is
-[Palmer Penguins dataset](https://allisonhorst.github.io/palmerpenguins/articles/intro.html)
-which is also used in other
-[TFX examples](https://github.com/tensorflow/tfx/tree/master/tfx/examples/penguin).
-
-There are four numeric features in this dataset:
-
-- culmen_length_mm
-- culmen_depth_mm
-- flipper_length_mm
-- body_mass_g
-
+'''
 All features were already normalized to have range [0,1]. We will build a
-classification model which predicts the `species` of penguins.
+classification model which predicts the persentage(>80% or <80%) of betery capacity
 
 Because TFX ExampleGen reads inputs from a directory, we need to create a
 directory and copy dataset to it.
-"""
+'''
 
 import urllib.request
 import tempfile
@@ -164,9 +116,8 @@ urllib.request.urlretrieve(_data_url, _data_filepath)
 
 !head {_data_filepath}
 
-"""You should be able to see five values. `species` is one of 0, 1 or 2, and all
-other features should have values between 0 and 1.
 
+'''
 ## Create a pipeline
 
 TFX pipelines are defined using Python APIs. We will define a pipeline which
@@ -197,7 +148,7 @@ of TFX which support Keras-based models. You need to write a Python file
 containing `run_fn` function, which is the entrypoint for the `Trainer`
 component.
 """
-
+'''
 _trainer_module_file = 'ccct_trainer.py'
 
 # Commented out IPython magic to ensure Python compatibility.
@@ -323,9 +274,6 @@ context = InteractiveContext()
 example_gen = tfx.components.CsvExampleGen(input_base=DATA_ROOT)
 context.run(example_gen)
 
-DATA_ROOT
-
-example_gen.outputs['examples'].get()
 
 import pprint as pp
 # Get the URI of the output artifact representing the training examples, which is a directory
@@ -400,12 +348,6 @@ We often call TFX pipelines "DAGs" which stands for directed acyclic graph.
 TFX also supports other orchestrators including Kubeflow Pipelines and Apache
 Airflow which are suitable for production use cases.
 
-See
-[TFX on Cloud AI Platform Pipelines](/tutorials/tfx/cloud-ai-platform-pipelines)
-or
-[TFX Airflow Tutorial](/tutorials/tfx/airflow_workshop)
-to learn more about other orchestration systems.
-
 Now we create a `LocalDagRunner` and pass a `Pipeline` object created from the
 function we already defined.
 
@@ -434,12 +376,3 @@ in the left-side panel in Colab, or using the following command:
 # List files in created model directory.
 !find {SERVING_MODEL_DIR}
 
-"""## Next steps
-
-You can find more resources on https://www.tensorflow.org/tfx/tutorials.
-
-Please see
-[Understanding TFX Pipelines](../../../guide/understanding_tfx_pipelines)
-to learn more about various concepts in TFX.
-
-"""
